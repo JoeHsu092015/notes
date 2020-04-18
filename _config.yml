@@ -10,8 +10,8 @@ site-twitter: #if your site has a twitter account, enter it here
 
 # Author Settings
 author: Joe Hsu # add your name
-author-img: david-freeman.jpg # add your photo
-about-author: I am a web developer focusing on front-end development. Always hungry to keep learning. # add description
+author-img: joe-hsu.png # add your photo
+about-author: 想法 -> 感覺 -> 行動 = 結果  # add description
 social-twitter: # add your Twitter handle
 social-facebook: # add your Facebook handle
 social-github: joehsu092015 # add your Github handle
@@ -33,5 +33,6 @@ plugins:
 
 paginate: 8
 paginate_path: "/page/:num"
+
 
 exclude: ["node_modules", "gulpfile.js", "package.json", "yarn.lock"]

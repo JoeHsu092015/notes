@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Logstash with input s3 plugin - Hello, world! I'm Joe Hsu</title>
+
+  <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
+
+    <meta content="Hello, world! I'm Joe Hsu" property="og:site_name">
+  
+    <meta content="Logstash with input s3 plugin" property="og:title">
+  
+  
+    <meta content="article" property="og:type">
+  
+  
+    <meta content="fetch data from amazon S3 service" property="og:description">
+  
+  
+    <meta content="http://localhost:4000/logstash-with-input-s3-plugin/" property="og:url">
+  
+  
+    <meta content="2020-04-18T17:32:20+08:00" property="article:published_time">
+    <meta content="http://localhost:4000/about/" property="article:author">
+  
+  
+    <meta content="http://localhost:4000/assets/img/joe-hsu.png" property="og:image">
+  
+  
+    
+    <meta content="infrastructure" property="article:section">
+    
+  
+  
+    
+    <meta content="elk" property="article:tag">
+    
+    <meta content="aws" property="article:tag">
+    
+  
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+  
+    <meta name="twitter:title" content="Logstash with input s3 plugin">
+  
+  
+    <meta name="twitter:url" content="http://localhost:4000/logstash-with-input-s3-plugin/">
+  
+  
+    <meta name="twitter:description" content="fetch data from amazon S3 service">
+  
+  
+    <meta name="twitter:image:src" content="http://localhost:4000/assets/img/joe-hsu.png">
+  
+
+	<meta name="description" content="fetch data from amazon S3 service">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/assets/img/favicon/apple-touch-icon-144x144.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#263959">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#263959">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#263959">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <aside class="sidebar">
+  <header>
+    <div class="about">
+      <div class="cover-author-image">
+        <a href="/"><img src="/assets/img/joe-hsu.png" alt="Joe Hsu"></a>
+      </div>
+      <div class="author-name">Joe Hsu</div>
+      <p>想法 -> 感覺 -> 行動 = 結果</p>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">Home</a></li>
+				<li><a href="/categories">Categories</a></li>
+				<li><a href="/tags">Tags</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+  </header> <!-- End Header -->
+  <footer>
+    <section class="contact">
+      <h3 class="contact-title">Contact me</h3>
+      <ul>
+        
+          <li><a href="https://twitter.com/artemsheludko_" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        
+        
+          <li><a href="https://facebook.com/" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+        
+        
+          <li class="github"><a href="http://github.com/joehsu092015" target="_blank"><i class="fa fa-github"></i></a></li>
+        
+        
+          <li class="linkedin"><a href="https://in.linkedin.com/" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+        
+        
+          <li class="email"><a href="mailto:example.david@blog.com"><i class="fa fa-envelope-o" aria-hidden="true"></i></a></li>
+        
+      </ul>
+    </section> <!-- End Section Contact -->
+    <div class="copyright">
+      <p>2020 &copy; Joe Hsu</p>
+    </div>
+  </footer> <!-- End Footer -->
+</aside> <!-- End Sidebar -->
+<div class="content-box clearfix">
+  <article class="article-page">
+  <div class="page-content">
+    
+    
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">Logstash with input s3 plugin</h1>
+        <div class="page-date"><span>2020, Apr 18&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      <p>在使用 s3 plugin 時候, 遇到 java error message 時候, 在 log file 會印出多行的 error stack trace. 可以使用 codec <strong>multiline</strong> 來解決, 把這些 error message 合併成一個 log message.</p>
+
+<p><strong>問題</strong>: 
+使用 multiline  後, add_field 和 @metadata 的資料會在每個 log file 的最後一筆 message 被清空, 導致讀不到設定的值.</p>
+
+<p>github 有人提出, 但是目前還沒把解決方法更新.
+https://github.com/logstash-plugins/logstash-input-s3/pull/173</p>
+
+<p><strong>解決</strong>:
+自己安裝 ruby 使用 gem 從 source code 自己加入網友提供的程式碼 build 一版新的 <code class="highlighter-rouge">logstash-input-s3-3.5.1.gem</code></p>
+
+<p>在 source code 的 lib/logstash/inputs/s3.rb 加入:</p>
+
+<pre><code class="language-ruby="># #ensure any stateful codecs (such as multi-line ) are flushed to the queue
+    @codec.flush do |event|
+      #-------new-----------
+      decorate(event)
+      
+      event.set("cloudfront_version", metadata[:cloudfront_version]) unless metadata[:cloudfront_version].nil?
+      event.set("cloudfront_fields", metadata[:cloudfront_fields]) unless metadata[:cloudfront_fields].nil?
+
+      if @include_object_properties
+        event.set("[@metadata][s3]", object.data.to_h)
+      else
+        event.set("[@metadata][s3]", {})
+      end
+
+      event.set("[@metadata][s3][key]", object.key)
+      #-------new end-----------
+      queue &lt;&lt; event
+    end
+</code></pre>
+
+<p>並在 Dockerfile 裡面安裝
+Dockerfile:</p>
+
+<pre><code class="language-dockerfile=">FROM docker.elastic.co/logstash/logstash-oss:7.4.2
+RUN rm -f /usr/share/logstash/pipeline/logstash.conf
+
+COPY logstash-input-s3-3.5.1.gem /
+RUN /usr/share/logstash/bin/logstash-plugin install /logstash-input-s3-3.5.1.gem &amp;&amp; \
+ /usr/share/logstash/bin/logstash-plugin install logstash-filter-json
+ADD pipeline/ /usr/share/logstash/pipeline/
+ADD config/ /usr/share/logstash/config/
+</code></pre>
+
+<ul>
+  <li><strong>java tomcat errorlog</strong></li>
+</ul>
+
+<pre><code class="language-java=">2016-04-07 15:27:28,459 [http-bio-8080-exec-33] ERROR v1.PaymentTxController  - Cannot get property 'attrs' on null object
+java.lang.NullPointerException: Cannot get property 'attrs' on null object
+    at com.b2boost.payment.provider.paybox.PayboxPaymentProviderService.createSubscriptionAndPay(PayboxPaymentProviderService.groovy:206)
+    at com.b2boost.payment.provider.paybox.PayboxPaymentProviderService$__tt__pay_closure9.doCall(PayboxPaymentProviderService.groovy:82)
+    at com.b2boost.commons.error.AppError.safe(AppError.groovy:53)
+    at com.b2boost.commons.error.AppError.safe(AppError.groovy:60)
+    at com.b2boost.payment.provider.paybox.PayboxPaymentProviderService.$tt__pay(PayboxPaymentProviderService.groovy:73)
+    at com.b2boost.payment.PaymentService$__tt__pay_closure8.doCall(PaymentService.groovy:52)
+    at com.b2boost.commons.error.AppError.safeWithEither(AppError.groovy:70)
+    at com.b2boost.commons.error.AppError.safeWithEither(AppError.groovy:64)
+    at com.b2boost.payment.PaymentService.$tt__pay(PaymentService.groovy:43)
+    at com.b2boost.users.api.v1.PaymentTxController$_save_closure1.doCall(PaymentTxController.groovy:49)
+    at com.b2boost.users.api.v1.BaseController.documentWithAuthorization(BaseController.groovy:101)
+    at com.b2boost.users.api.v1.PaymentTxController.save(PaymentTxController.groovy:45)
+    at grails.plugin.cache.web.filter.PageFragmentCachingFilter.doFilter(PageFragmentCachingFilter.java:177)
+    at grails.plugin.cache.web.filter.AbstractFilter.doFilter(AbstractFilter.java:63)
+    at com.odobo.grails.plugin.springsecurity.rest.RestTokenValidationFilter.processFilterChain(RestTokenValidationFilter.groovy:99)
+    at com.odobo.grails.plugin.springsecurity.rest.RestTokenValidationFilter.doFilter(RestTokenValidationFilter.groovy:66)
+    at grails.plugin.springsecurity.web.filter.GrailsAnonymousAuthenticationFilter.doFilter(GrailsAnonymousAuthenticationFilter.java:53)
+    at com.odobo.grails.plugin.springsecurity.rest.RestAuthenticationFilter.doFilter(RestAuthenticationFilter.groovy:108)
+    at grails.plugin.springsecurity.web.authentication.logout.MutableLogoutFilter.doFilter(MutableLogoutFilter.java:82)
+    at com.odobo.grails.plugin.springsecurity.rest.RestLogoutFilter.doFilter(RestLogoutFilter.groovy:63)
+    at com.brandseye.cors.CorsFilter.doFilter(CorsFilter.java:82)
+    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+    at java.lang.Thread.run(Thread.java:745)
+</code></pre>
+
+<ul>
+  <li><strong>logstash.conf</strong></li>
+</ul>
+
+<pre><code class="language-json=">input {
+  s3 {
+    access_key_id =&gt; "sssssssss"
+    secret_access_key =&gt; "vvvvvvvvvvv"
+    bucket =&gt; "my-bucket"
+    region =&gt; "us-east-1"
+    prefix =&gt; "logs/"
+    additional_settings =&gt; {
+      force_path_style =&gt; true
+      follow_redirects =&gt; false
+    }
+
+    codec =&gt; multiline {
+      pattern =&gt; "^%{TIMESTAMP_ISO8601} "
+      negate =&gt; true
+      what =&gt; "previous"
+    }
+
+    add_field =&gt; {
+      "service_name"=&gt;"my-service"
+    }
+  }
+ 
+}
+
+filter {
+  
+  grok {
+    break_on_match =&gt; true
+    match =&gt; {
+      "message" =&gt; [
+        # java log pattern
+        "^%{TIMESTAMP_ISO8601:timestamp} \[%{GREEDYDATA:process_id}\] %{LOGLEVEL:message_level} %{GREEDYDATA:service_message}$",
+        "^%{TIMESTAMP_ISO8601:timestamp} %{GREEDYDATA:service_message}$"
+      ]
+    }
+  }
+
+  date {
+    match =&gt;["timestamp","yyyy-MM-dd'T'HH:mm:ssZ","yyyy/MM/dd - HH:mm:ss","ISO8601"]
+    target =&gt;"@timestamp"
+    locale=&gt;"en"
+  }
+
+  mutate { 
+    add_field =&gt; { "file_name" =&gt; "%{[@metadata][s3][key]}"}
+  }
+
+}
+
+
+output {
+  elasticsearch {
+      hosts =&gt; [ "elasticsearch:9200" ]
+      index =&gt; "%{service_name}-%{+YYYY.MM.dd}"
+  }
+}
+</code></pre>
+
+
+      <div class="page-footer">
+        <div class="page-share">
+          <a href="https://twitter.com/intent/tweet?text=Logstash with input s3 plugin&url=http://localhost:4000/logstash-with-input-s3-plugin/" title="Share on Twitter" rel="nofollow" target="_blank">Twitter</a>
+          <a href="https://facebook.com/sharer.php?u=http://localhost:4000/logstash-with-input-s3-plugin/" title="Share on Facebook" rel="nofollow" target="_blank">Facebook</a>
+          <a href="https://plus.google.com/share?url=http://localhost:4000/logstash-with-input-s3-plugin/" title="Share on Google+" rel="nofollow" target="_blank">Google+</a>
+        </div>
+        <div class="page-tag">
+          
+            <a href="/tags#elk" class="tag">&#35; elk</a>
+          
+            <a href="/tags#aws" class="tag">&#35; aws</a>
+          
+        </div>
+      </div>
+      <section class="comment-area">
+  <div class="comment-wrapper">
+    
+    <div id="disqus_thread" class="article-comments"></div>
+    <script>
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//mr-brown.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</section> <!-- End Comment Area -->
+
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
+
+</div>
+
+  </div>
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+
+</body>
+</html>

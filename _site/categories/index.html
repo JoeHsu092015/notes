@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Tags - Hello, world! I'm Joe Hsu</title>
+	<title>categories - Hello, world! I'm Joe Hsu</title>
 
   <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
 
     <meta content="Hello, world! I'm Joe Hsu" property="og:site_name">
   
-    <meta content="Tags" property="og:title">
+    <meta content="categories" property="og:title">
   
   
     <meta content="article" property="og:type">
@@ -18,7 +18,7 @@
 " property="og:description">
   
   
-    <meta content="http://localhost:4000/tags/" property="og:url">
+    <meta content="http://localhost:4000/categories/" property="og:url">
   
   
   
@@ -31,10 +31,10 @@
     <meta name="twitter:site" content="@">
     <meta name="twitter:creator" content="@">
   
-    <meta name="twitter:title" content="Tags">
+    <meta name="twitter:title" content="categories">
   
   
-    <meta name="twitter:url" content="http://localhost:4000/tags/">
+    <meta name="twitter:url" content="http://localhost:4000/categories/">
   
   
     <meta name="twitter:description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
@@ -113,41 +113,29 @@
   </footer> <!-- End Footer -->
 </aside> <!-- End Sidebar -->
 <div class="content-box clearfix">
-  
+  <section class="blog-tags">
+<h1>Categories in Blog</h1>
 
 
-<section class="blog-tags">
-  <h1>Tags in Blog</h1>
-  <ul class="tags">
-<!--  cycles through tag list and creates header row of all tags used in site with accompanying per-tag counts...-->
   
-    <li ><a href="#aws" class="tag">aws <span>(1)</span></a></li>
-  
-    <li ><a href="#elk" class="tag">elk <span>(1)</span></a></li>
-  
-  </ul>
-<!--cycles through tag list and creates subheader for each tag name...-->
-  
-  <h2 id="aws">aws</h2>
-<!--  lists all posts corresponding to specific tag...-->
+    <div id="infrastructure-ref">
+    <h2> Infrastructure </h2>
+    <ul>
+      
+      
+        
+          
+            <li><a href="/logstash-with-input-s3-plugin/">Logstash with input s3 plugin</a> <span class="text-muted">- April 18, 2020</span></li>
+          
+        
+      
+  	</ul>
     
-    <div class="tag-list">
-        <span><a href="/logstash-with-input-s3-plugin/">Logstash with input s3 plugin</a></span>
-        <small><span>| 18 Apr 2020</span></small>
-    </div>
     
-  
-  <h2 id="elk">elk</h2>
-<!--  lists all posts corresponding to specific tag...-->
-    
-    <div class="tag-list">
-        <span><a href="/logstash-with-input-s3-plugin/">Logstash with input s3 plugin</a></span>
-        <small><span>| 18 Apr 2020</span></small>
-    </div>
-    
-  
+
+
+<div class="clearfix"></div>
 </section>
-
 </div>
 
   </div>
